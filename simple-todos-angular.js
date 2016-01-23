@@ -1,5 +1,35 @@
 Tasks = new Mongo.Collection('tasks');
 
+Tasks.attachSchema(new SimpleSchema({
+  text: {
+    type: String,
+    min: 1
+  },
+  createdAt: {
+    type: Date
+  },
+  owner: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    index: 1
+  },
+  username: {
+    type: String,
+    min: 1,
+    index: 1
+  },
+  checked: {
+    type: Boolean,
+    index: 1,
+    optional: true
+  },
+  private: {
+    type: Boolean,
+    index: 1,
+    optional: true
+  }
+}));
+
 if (Meteor.isClient) {
 
   Accounts.ui.config({
