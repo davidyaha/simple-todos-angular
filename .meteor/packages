@@ -17,3 +17,5 @@ es5-shim                # ECMAScript 5 compatibility for older browsers.
 angular@1.2.0-rc.6
 accounts-password
 dotansimha:accounts-ui-angular
+aldeed:collection2
+bookmd:schema-migrations
