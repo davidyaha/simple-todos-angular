@@ -27,6 +27,16 @@ Tasks.attachSchema(new SimpleSchema({
     type: Boolean,
     index: 1,
     optional: true
+  },
+  type: {
+    type: String,
+    allowedValues: ['repeated', 'once'],
+    defaultValue: 'once'
+  },
+  repeatsEvery: {
+    type: String,
+    allowedValues: ['day', 'week', 'month', 'year'],
+    optional: true
   }
 }));
 
