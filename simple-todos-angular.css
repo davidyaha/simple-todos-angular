@@ -89,6 +89,10 @@ li .text {
   margin-left: 10px;
 }
 
+li .type {
+  margin-left: 20px;
+}
+
 li.checked {
   color: #888;
 }

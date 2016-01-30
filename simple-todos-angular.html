@@ -42,6 +42,17 @@
 
       <span class="text">
         <strong>{{task.username}}</strong> - {{task.text}}
+        <span ng-if="task.type === 'repeated'"> every {{task.repeatsEvery}}</span>
+      </span>
+
+      <select class="type" ng-options="type for type in types"
+              ng-model="task.type" ng-init="task.type"
+              ng-change="setType(task)"></select>
+      <span class="repeats" ng-if="task.type === 'repeated'">
+       <button ng-click="setRepeatsEvery(task, 'day')">day</button>
+       <button ng-click="setRepeatsEvery(task, 'week')">week</button>
+       <button ng-click="setRepeatsEvery(task, 'month')">month</button>
+       <button ng-click="setRepeatsEvery(task, 'year')">year</button>
       </span>
     </li>
   </ul>

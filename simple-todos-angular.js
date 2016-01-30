@@ -67,6 +67,8 @@ if (Meteor.isClient) {
         return Tasks.find($scope.getReactively('query'), {sort: {createdAt: -1}})
       });
 
+      $scope.types = Tasks.simpleSchema()._schema.type.allowedValues;
+
       $scope.addTask = function (newTask) {
         $meteor.call('addTask', newTask);
       };
@@ -81,6 +83,14 @@ if (Meteor.isClient) {
 
       $scope.setPrivate = function (task) {
         $meteor.call('setPrivate', task._id, ! task.private);
+      };
+
+      $scope.setType = function(task) {
+        $meteor.call('setType', task._id, task.type);
+      };
+
+      $scope.setRepeatsEvery = function(task, repeatsEvery) {
+        $meteor.call('setRepeatsEvery', task._id, repeatsEvery);
       };
 
       $scope.$watch('hideCompleted', function() {
@@ -138,6 +148,34 @@ Meteor.methods({
     }
 
     Tasks.update(taskId, { $set: { private: setToPrivate } });
+  },
+  setType: function (taskId, type) {
+    var task = Tasks.findOne(taskId);
+
+    // Make sure only the task owner can change task's type
+    if (task.owner !== Meteor.userId()) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    if (type === 'once')
+      Tasks.update(taskId, { $set: { type: type }, $unset: { repeatsEvery: '' } });
+    else
+      Tasks.update(taskId, { $set: { type: type , repeatsEvery: 'day'} });
+  },
+  setRepeatsEvery: function (taskId, repeatsEvery) {
+    var task = Tasks.findOne(taskId);
+
+    // Make sure only the task owner can change repeat every
+    if (task.owner !== Meteor.userId()) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    // Make sure the task is a repeated task
+    if (task.type !== 'repeated') {
+      throw new Meteor.Error('not-allowed')
+    }
+
+    Tasks.update(taskId, { $set: { repeatsEvery: repeatsEvery } });
   }
 });
 
